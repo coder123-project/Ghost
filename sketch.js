@@ -1,11 +1,9 @@
-  
 var towerImg, tower;
 var doorImg, door, doorsGroup;
 var climberImg, climber, climbersGroup;
 var ghost, ghostImg;
 var invisibleBlockGroup, invisibleBlock;
 var gameState = "play"
-
 
 function preload(){
   towerImg = loadImage("tower.png");
@@ -15,7 +13,7 @@ function preload(){
   spookySound = loadSound("spooky.wav");
 }
 
-function setup() {
+function setup(){
   createCanvas(600,600);
   spookySound.loop();
   tower = createSprite(300,300);
@@ -31,98 +29,83 @@ function setup() {
   ghost.addImage("ghost", ghostImg);
 }
 
-
-function draw() {
-  background(255);
- if(tower.y > ){
-      tower.y = 300
-    } 
-  
+function draw(){
+  background(0);
   if (gameState === "play") {
+    if(keyDown("left_arrow")){
+      ghost.x = ghost.x - 3;
+    }
     
-    if(keyDown("")){
-        ghost.x = ghost.x - 3;
-
-      // write a code to move left when left arrow is pressed
+    if(keyDown("right_arrow")){
+      ghost.x = ghost.x + 3;
     }
-    if(keyDown("")){
-  
-          ghost.x = ghost.x + 3;
-
-      // write a code to move left when right arrow is pressed
-      
-    }
-    if(keyDown("")){
-  
-         ghost.velocityY = -10;
-
-      // write a code to move up when space arrow is pressed
-      
-    }
-  
-  ghost.velocityY = ghost.velocityY + 0.8;
-  
-   
-      //write a condition for infinte scrolling tower
     
-      spawnDoors();
+    if(keyDown("space")){
+      ghost.velocityY = -10;
+    }
+    
+    ghost.velocityY = ghost.velocityY + 0.8
+    
+    if(tower.y > 400){
+      tower.y = 300
+    }
+    spawnDoors();
 
-  
-//write a code to make invisibleBlockGroup collide with ghost destroy the ghost and make gamestate to end.
-     if(climbersGroup.isTouching(ghost)){
+    
+    //climbersGroup.collide(ghost);
+    if(climbersGroup.isTouching(ghost)){
       ghost.velocityY = 0;
     }
     if(invisibleBlockGroup.isTouching(ghost) || ghost.y > 600){
-      ghost.
-      gameState = ""
+      ghost.destroy();
+      gameState = "end"
     }
     
+    drawSprites();
+  }
   
-  drawSprites();
-}
   if (gameState === "end"){
     stroke("yellow");
     fill("yellow");
     textSize(30);
     text("Game Over", 230,250)
   }
+
 }
 
-function spawnDoors()
- {
-  //write code here to spawn the clouds
+function spawnDoors() {
+  //write code here to spawn the doors in the tower
   if (frameCount % 240 === 0) {
     var door = createSprite(200, -50);
     var climber = createSprite(200,10);
     var invisibleBlock = createSprite(200,15);
     invisibleBlock.width = climber.width;
     invisibleBlock.height = 2;
-    //add the random function
-    //
+    
+    door.x = Math.round(random(120,400));
+    climber.x = door.x;
+    invisibleBlock.x = door.x;
+    
     door.addImage(doorImg);
     climber.addImage(climberImg);
     
     door.velocityY = 1;
     climber.velocityY = 1;
     invisibleBlock.velocityY = 1;
+    
+    ghost.depth = door.depth;
+    ghost.depth +=1;
+   
+    //assign lifetime to the variable
+    door.lifetime = 800;
+    climber.lifetime = 800;
+    invisibleBlock.lifetime = 800;
 
-    //change the depth of the ghost and door
     
-     
-ghost.depth = door.depth;
-    ghost.depth =1;
-    
-    //assign lifetime for the  door, climber and invisible block
-
- .lifetime = 800;
-    .lifetime = 800;
-    .lifetime = 800;
-    //add each obstacle to the group obstaclesGroup.add(obstacle);here  obstacle are door, climber and invisible block
-    
-     doorsGroup.add();
+    //add each door to the group
+    doorsGroup.add(door);
     invisibleBlock.debug = true;
-    climbersGroup.add();
-    invisibleBlockGroup.add();
+    climbersGroup.add(climber);
+    invisibleBlockGroup.add(invisibleBlock);
   }
 }
-
